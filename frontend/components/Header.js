@@ -37,13 +37,13 @@ const Header = (props) => {
               <>
                 <NavItem>
                   <Link href="/signin">
-                    <NavLink style={{ cursor: "pointer" }}>Signin</NavLink>
+                    <NavLink style={{ cursor: "pointer" }}>Sign In</NavLink>
                   </Link>
                 </NavItem>
 
                 <NavItem>
                   <Link href="/signup">
-                    <NavLink style={{ cursor: "pointer" }}>Signup</NavLink>
+                    <NavLink style={{ cursor: "pointer" }}>Sign Up</NavLink>
                   </Link>
                 </NavItem>
               </>
@@ -64,7 +64,7 @@ const Header = (props) => {
                     style={{ cursor: "pointer" }}
                     onClick={() => signout(() => router.replace(`/signin`))}
                   >
-                    Signout
+                    Sign Out
                   </NavLink>
                 </NavItem>
               </>
