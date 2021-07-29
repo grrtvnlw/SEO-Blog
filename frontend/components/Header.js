@@ -23,7 +23,12 @@ const Header = (props) => {
     <div>
       <Navbar color="light" light expand="md">
         <Link href="/">
-          <NavLink className="font-weight-bold text-dark">{APP_NAME}</NavLink>
+          <NavLink
+            className="font-weight-bold text-dark"
+            style={{ cursor: "pointer" }}
+          >
+            {APP_NAME}
+          </NavLink>
         </Link>
         <NavbarToggler onClick={toggle} />
         <Collapse isOpen={isOpen} navbar>
@@ -32,27 +37,37 @@ const Header = (props) => {
               <>
                 <NavItem>
                   <Link href="/signin">
-                    <NavLink>Signin</NavLink>
+                    <NavLink style={{ cursor: "pointer" }}>Signin</NavLink>
                   </Link>
                 </NavItem>
 
                 <NavItem>
                   <Link href="/signup">
-                    <NavLink>Signup</NavLink>
+                    <NavLink style={{ cursor: "pointer" }}>Signup</NavLink>
                   </Link>
                 </NavItem>
               </>
             )}
 
             {isAuth() && (
-              <NavItem>
-                <NavLink
-                  style={{ cursor: "pointer" }}
-                  onClick={() => signout(() => router.replace(`/signin`))}
-                >
-                  Signout
-                </NavLink>
-              </NavItem>
+              <>
+                <NavItem>
+                  <Link href={isAuth().role === 1 ? "/admin" : "/user"}>
+                    <NavLink style={{ cursor: "pointer" }}>{`${
+                      isAuth().name
+                    }'s Dashboard`}</NavLink>
+                  </Link>
+                </NavItem>
+
+                <NavItem>
+                  <NavLink
+                    style={{ cursor: "pointer" }}
+                    onClick={() => signout(() => router.replace(`/signin`))}
+                  >
+                    Signout
+                  </NavLink>
+                </NavItem>
+              </>
             )}
           </Nav>
         </Collapse>

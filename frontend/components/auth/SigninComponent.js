@@ -34,7 +34,11 @@ const SigninComponent = () => {
         // TODO: save user info to local storage
         // TODO: authenticate user
         authenticate(data, () => {
-          router.push(`/`);
+          if (isAuth() && isAuth().role === 1) {
+            router.push(`/admin`);
+          } else if (isAuth() && isAuth().role !== 1) {
+            router.push(`/user`);
+          }
         });
       }
     });
