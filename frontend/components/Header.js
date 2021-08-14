@@ -9,12 +9,21 @@ import {
 } from "reactstrap";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import Router from "next/router";
+import NProgress from "nprogress";
 
 import { APP_NAME } from "../config";
 import { signout, isAuth } from "../actions/auth";
 
+import ".././node_modules/nprogress/nprogress.css";
+
+Router.onRouteChangeStart = (url) => NProgress.start();
+Router.onRouteChangeComplete = (url) => NProgress.done();
+Router.onRouteChangeError = (url) => NProgress.done();
+
 const Header = (props) => {
   const router = useRouter();
+
   const [isOpen, setIsOpen] = useState(false);
 
   const toggle = () => setIsOpen(!isOpen);
