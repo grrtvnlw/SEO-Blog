@@ -1,3 +1,4 @@
+import React from "react";
 import Link from "next/link";
 
 import Layout from "../../components/Layout";
@@ -17,8 +18,13 @@ const AdminIndex = () => {
                 <li className="list-group-item">
                   <Link href="/admin/crud/category-tag">Create Category</Link>
                 </li>
+
                 <li className="list-group-item">
                   <Link href="/admin/crud/category-tag">Create Tag</Link>
+                </li>
+
+                <li className="list-group-item">
+                  <Link href="/admin/crud/blog">Create Blog</Link>
                 </li>
               </ul>
             </div>
