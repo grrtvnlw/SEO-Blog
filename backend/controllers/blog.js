@@ -187,6 +187,7 @@ exports.listAllBlogsCategoriesTags = (req, res) => {
 exports.read = (req, res) => {
   const slug = req.params.slug.toLowerCase();
   Blog.findOne({ slug })
+    // .select("-photo")
     .populate("categories", "_id name slug")
     .populate("tags", "_id name slug")
     .populate("postedBy", "_id name username")
@@ -218,5 +219,79 @@ exports.remove = (req, res) => {
 };
 
 exports.update = (req, res) => {
-  //
+  const slug = req.params.slug.toLowerCase();
+
+  Blog.findOne({ slug }).exec((err, oldBlog) => {
+    if (err) {
+      return res.status(400).json({
+        error: errorHandler(err),
+      });
+    }
+
+    let form = new formidable.IncomingForm();
+    form.keepExtensions = true;
+
+    form.parse(req, (err, fields, files) => {
+      if (err) {
+        return res.status(400).json({
+          error: "Image could not upload",
+        });
+      }
+
+      let slugBeforeMerge = oldBlog.slug;
+      oldBlug = _.merge(oldBlog, fields);
+      oldBlog.slug = slugBeforeMerge;
+
+      const { body, desc, categories, tags } = fields;
+
+      if (body) {
+        oldBlog.excerpt = smartTrim(body, 320, " ", " ...");
+        oldBlog.desc = stripHtml(body.substring(0, 160));
+      }
+
+      if (categories) {
+        oldBlog.categories = categories.split(",");
+      }
+
+      if (tags) {
+        oldBlog.tags = tags.split(",");
+      }
+
+      if (files.photo) {
+        if (files.photo.size > 10000000) {
+          return res.status(400).json({
+            error: "Image should be less than 1mb in size",
+          });
+        }
+        oldBlog.photo.data = fs.readFileSync(files.photo.path);
+        oldBlog.photo.contentType = files.photo.type;
+      }
+
+      oldBlog.save((err, result) => {
+        if (err) {
+          return res.status(400).json({
+            error: errorHandler(err),
+          });
+        }
+        // res.photo = undefined;
+        res.json(result);
+      });
+    });
+  });
+};
+
+exports.photo = (req, res) => {
+  const slug = req.params.slug.toLowerCase();
+  Blog.findOne({ slug })
+    .select("photo")
+    .exec((err, blog) => {
+      if (err || !blog) {
+        return res.status(400).json({
+          error: errorHandler(err),
+        });
+      }
+      res.set("Content-Type", blog.photo.contentType);
+
+      return res.send(blog.photo.data);
+    });
 };

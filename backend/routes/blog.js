@@ -13,10 +13,12 @@ const {
   read,
   remove,
   update,
+  photo,
 } = require("../controllers/blog");
 
 router.get("/blogs", list);
 router.get("/blog/:slug", read);
+router.get("/blog/photo/:slug", photo);
 router.post("/blog", requireSignin, adminMiddleware, create);
 router.post("/blogs-categories-tags", listAllBlogsCategoriesTags);
 router.put("/blog/:slug", requireSignin, adminMiddleware, update);
